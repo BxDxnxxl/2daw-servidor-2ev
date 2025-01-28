@@ -10,5 +10,6 @@ namespace RestauranteAPI.Repositories
         Task UpdateAsync(LineaDePedido Compra);
         Task DeleteAsync(int id);
         Task InicializarDatosAsync();
+        Task<List<LienaDePedidoDTO>> GetPedidosByUserAsync(int id);
     }
 }

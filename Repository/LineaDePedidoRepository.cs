@@ -1,4 +1,5 @@
 using Microsoft.Data.SqlClient;
+using Microsoft.Identity.Client;
 
 namespace RestauranteAPI.Repositories
 {
@@ -133,6 +134,42 @@ namespace RestauranteAPI.Repositories
                     await command.ExecuteNonQueryAsync();
                 }
             }
+        }
+
+        public async Task<List<LienaDePedidoDTO>> GetPedidosByUserAsync(int idUser){
+            var lineasDePedido = new List<LienaDePedidoDTO>();
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                var query = "SELECT PP.nombre, B.Nombre, P.nombre FROM LineaDePedido as LDP " +
+                 "inner join compra as C on C.id = LDP.FkIdCompra "+
+                 "inner join platoprincipal as PP on PP.id = LDP.PlatoPrincipalId "+
+                 "inner join bebida as B on B.id = LDP.BebidaId "+
+                 "inner join postre as P on P.id = LDP.PostreId "+
+                 "WHERE C.FkIdUsuario = ";
+                 query = query + idUser;
+
+                using (var command = new SqlCommand(query, connection))
+                {
+                    //command.Parameters.AddWithValue("@userId", idUser);
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            var lineaDePedido = new LienaDePedidoDTO{
+                                PlatoPrincipalNombre = reader.GetString(0),
+                                BebidaNombre = reader.GetString(1),
+                                PostreNombre = reader.GetString(2)
+                            };
+
+                            lineasDePedido.Add(lineaDePedido);
+                        }
+                    }
+                }
+            }
+            return lineasDePedido;
         }
 
         public async Task InicializarDatosAsync()

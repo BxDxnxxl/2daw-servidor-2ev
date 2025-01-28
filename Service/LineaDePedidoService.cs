@@ -45,6 +45,11 @@ namespace RestauranteAPI.Service
             await _lineaDePedidoRepository.DeleteAsync(id);
         }
 
+        public async Task<List<LienaDePedidoDTO>> GetPedidosByUserAsync(int idUser)
+        {
+            return await _lineaDePedidoRepository.GetPedidosByUserAsync(idUser);
+        }
+
         public async Task InicializarDatosAsync()
         {
             await _lineaDePedidoRepository.InicializarDatosAsync();

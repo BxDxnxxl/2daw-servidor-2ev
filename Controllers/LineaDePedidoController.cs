@@ -73,6 +73,17 @@ namespace RestauranteAPI.Controllers
             return NoContent();
         }
 
+        [HttpGet("{idUser}/lineasdepedido")]
+        public async Task<ActionResult<LienaDePedidoDTO>> GetPedidoByUser(int idUser)
+        {
+            var lineaDePedido = await _serviceLineaDePedido.GetPedidosByUserAsync(idUser);
+            if (lineaDePedido == null)
+            {
+                return NotFound();
+            }
+            return Ok(lineaDePedido);
+        }
+
         [HttpPost("inicializar")]
         public async Task<IActionResult> InicializarDatos()
         {
