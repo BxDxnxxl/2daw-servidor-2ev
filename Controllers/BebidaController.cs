@@ -35,7 +35,7 @@ namespace RestauranteAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<PlatoPrincipal>> CreateBebida(Bebida bebida)
+        public async Task<ActionResult<Bebida>> CreateBebida(Bebida bebida)
         {
             await _serviceBebida.AddAsync(bebida);
             return CreatedAtAction(nameof(GetBebida), new { id = bebida.Id }, bebida);
